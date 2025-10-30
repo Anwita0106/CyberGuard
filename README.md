@@ -51,9 +51,18 @@ CyberGuard/
 └── README.md
 
 ⚡ How to Run Locally
+
+
+
+
+
 Step 1️⃣ – Clone this repository
 git clone https://github.com/Anwita0106/CyberGuard.git
 cd CyberGuard
+
+
+
+
 
 Step 2️⃣ – Create a virtual environment
 python -m venv venv
