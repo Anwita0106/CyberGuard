@@ -98,7 +98,7 @@ python app.py
 
 Step 5️⃣ – Visit in browser
 
-👉 Open http://127.0.0.1:5000
+👉 Open http://(get link)
 
 Enter a URL — get instant results! ⚡
 
