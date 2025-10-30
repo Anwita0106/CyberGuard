@@ -13,18 +13,29 @@ This project combines cybersecurity principles with machine learning intelligenc
 ⚙️ Tech Stack
 Layer	Technology
 💻 Frontend	HTML5, CSS3, JavaScript
+
 🔥 Backend	Python (Flask)
+
 🧠 Machine Learning	Scikit-learn, Pandas, Joblib
+
 📂 Dataset	Public Phishing & Legitimate URL dataset
+
 🧰 Others	TLDExtract, Validators, Feature Engineering
+
 🚀 Features
 
 ✅ Detects if a given URL is Legitimate or Phishing
+
 ✅ Simple, intuitive web interface
+
 ✅ Lightweight Flask backend — easy to run locally
+
 ✅ Uses real URL-based features (length, domain, symbols, etc.)
+
 ✅ Trained ML model for high accuracy predictions
+
 ✅ Easily extendable for future cybersecurity projects
+
 
 🧩 Project Structure
 CyberGuard/
