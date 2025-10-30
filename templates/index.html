@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>PhishScan v2 — Smart URL Inspector</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+<div class="container py-5">
+  <div class="row g-4">
+    <div class="col-md-6">
+      <div class="card shadow-sm p-3">
+        <h4>PhishScan — Smart URL Inspector</h4>
+        <p class="text-muted">Paste a URL to get an interactive analysis. Uses ML if model exists, otherwise a fast heuristic.</p>
+        <div class="mb-2">
+          <input id="urlInput" class="form-control" placeholder="https://example.com/login">
+        </div>
+        <div class="d-flex gap-2">
+          <button id="checkBtn" class="btn btn-primary">Check URL</button>
+          <button id="clearBtn" class="btn btn-outline-secondary">Clear</button>
+          <button id="exportBtn" class="btn btn-outline-success">Export History</button>
+        </div>
+        <hr>
+        <div id="resultCard" style="display:none;">
+          <h5 id="verdictBadge"></h5>
+          <p id="scoreText"></p>
+          <details>
+            <summary>Feature breakdown</summary>
+            <pre id="featureBox" class="small bg-light p-2 rounded"></pre>
+          </details>
+        </div>
+      </div>
+
+      <div class="card mt-3 shadow-sm p-3">
+        <h5>Recent checks</h5>
+        <div style="max-height:300px; overflow:auto;">
+          <table class="table table-sm" id="historyTable">
+            <thead><tr><th>Time</th><th>URL</th><th>Score</th><th>Verdict</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card shadow-sm p-3">
+        <h5>Score trend (last 20)</h5>
+        <canvas id="scoreChart" height="200"></canvas>
+      </div>
+
+      <div class="card mt-3 shadow-sm p-3">
+        <h5>Tips & quick actions</h5>
+        <ul>
+          <li>Check domain carefully: does it match the brand?</li>
+          <li>Hover links — inspect target before clicking.</li>
+          <li>High score + IP host or @ sign are strong red flags.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+async function fetchHistory(){
+  const res = await fetch('/api/history');
+  const data = await res.json();
+  return data;
+}
+
+function tsToShort(ts){
+  const d = new Date(ts*1000);
+  return d.toLocaleString();
+}
+
+function updateHistoryTable(hist){
+  const tbody = document.querySelector('#historyTable tbody');
+  tbody.innerHTML = '';
+  hist.slice(0,50).forEach(row=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${tsToShort(row.ts)}</td><td style="max-width:220px; word-break:break-all">${row.url}</td><td>${row.score.toFixed(3)}</td><td>${row.verdict}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function updateChart(hist){
+  const last = hist.slice(0,20).reverse();
+  const labels = last.map(r=> (new Date(r.ts*1000)).toLocaleTimeString());
+  const scores = last.map(r=> r.score);
+  if(window.scoreChartInst){
+    window.scoreChartInst.data.labels = labels;
+    window.scoreChartInst.data.datasets[0].data = scores;
+    window.scoreChartInst.update();
+  } else {
+    const ctx = document.getElementById('scoreChart').getContext('2d');
+    window.scoreChartInst = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{ label:'Phishing score', data: scores, tension:0.3 }]
+      },
+      options: {
+        scales: { y: { min:0, max:1 } }
+      }
+    });
+  }
+}
+
+async function checkUrl(url){
+  const res = await fetch('/api/predict', {
+    method:'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({url})
+  });
+  const j = await res.json();
+  document.getElementById('resultCard').style.display='block';
+  document.getElementById('verdictBadge').textContent = j.verdict === 'Phishing' ? '⚠️ Phishing detected' : '✅ Looks legitimate';
+  document.getElementById('scoreText').textContent = j.score !== null ? `Score: ${j.score} (method: ${j.method})` : '';
+  document.getElementById('featureBox').textContent = JSON.stringify(j.features, null, 2);
+  // refresh history and chart
+  const hist = await fetchHistory();
+  updateHistoryTable(hist);
+  updateChart(hist);
+}
+
+document.getElementById('checkBtn').addEventListener('click', async ()=>{
+  const url = document.getElementById('urlInput').value.trim();
+  if(!url) return alert('Please enter a URL');
+  await checkUrl(url);
+});
+
+document.getElementById('clearBtn').addEventListener('click', ()=>{
+  document.getElementById('urlInput').value = '';
+  document.getElementById('resultCard').style.display='none';
+});
+
+document.getElementById('exportBtn').addEventListener('click', async ()=>{
+  const hist = await fetchHistory();
+  const blob = new Blob([JSON.stringify(hist, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'phishscan_history.json'; a.click();
+});
+
+// on load
+(async ()=>{
+  const hist = await fetchHistory();
+  updateHistoryTable(hist);
+  updateChart(hist);
+})();
+</script>
+</body>
+</html>
