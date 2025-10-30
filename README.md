@@ -94,11 +94,18 @@ Enter a URL — get instant results! ⚡
 🧠 Future Enhancements
 
 ✨ Deploy on cloud (Heroku / Render / HuggingFace Spaces)
+
+
 ✨ Add real-time threat API integration
+
+
 ✨ Build browser extension for instant URL checking
+
+
 ✨ Enhance ML model with deep learning (LSTM)
 
 🧑‍💻 Developer
+
 
 👩‍💻 Anwita Padhi
 💬 Passionate about Cybersecurity, AI, and Web Development
