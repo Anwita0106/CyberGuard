@@ -109,7 +109,7 @@ Enter a URL — get instant results! ⚡
 
 👩‍💻 Anwita Padhi
 💬 Passionate about Cybersecurity, AI, and Web Development
-🌐 GitHub Profile
+
 
 ❤️ Contributions
 
