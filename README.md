@@ -42,13 +42,20 @@ This project combines **cybersecurity principles** with **machine learning intel
 CyberGuard/
 │
 ├── app.py # Flask web application
+
 ├── feature_extractor.py # URL feature extraction logic
+
 ├── data/ # Dataset (optional)
+
 ├── templates/
+
 │ └── index.html # Frontend HTML page
 ├── static/
+
 │ └── css/ # Stylesheets
+
 ├── model.joblib # Trained ML model (optional)
+
 └── README.md
 
 yaml
@@ -95,13 +102,12 @@ Step 5️⃣ – Open in Browser
 👉 Visit: http://127.0.0.1:5000/
 Enter a URL and get instant phishing detection results ⚡
 
+
+
 🌍 Use Cases
 🛡️ Phishing detection for end users
-
 🌐 Browser-based URL safety checking
-
 🏢 Enterprise cybersecurity tools
-
 🎓 Educational cybersecurity & ML projects
 
 🧑‍💻 Developer
