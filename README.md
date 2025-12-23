@@ -1,6 +1,6 @@
 🛡️ CyberGuard: Intelligent Phishing URL Detection System
 
-cyberGuard is a smart web app designed to protect users from phishing attacks by analyzing and detecting malicious URLs using Machine Learning.
+CyberGuard is a smart web app designed to protect users from phishing attacks by analyzing and detecting malicious URLs using Machine Learning.
 Built with  Python (Flask) and a trained ML model, it provides instant results and real-time phishing detection through a clean, minimal web interface.
 
 
@@ -15,9 +15,13 @@ This project combines cybersecurity principles with machine learning intelligenc
 ⚙️ Tech Stack
 Layer	Technology
 💻 Frontend	HTML5, CSS3, JavaScript
+
 🔥 Backend	Python (Flask)
+
 🧠 Machine Learning	Scikit-learn, Pandas, Joblib
+
 📂 Dataset	Public Phishing & Legitimate URL dataset
+
 🧰 Others	TLDExtract, Validators, Feature Engineering
 
 
@@ -25,10 +29,15 @@ Layer	Technology
 
 🚀 Features
 ✅ Detects if a given URL is Legitimate or Phishing
+
 ✅ Simple, intuitive web interface
+
 ✅ Lightweight Flask backend — easy to run locally
+
 ✅ Uses real URL-based features (length, domain, symbols, etc.)
+
 ✅ Trained ML model for high accuracy predictions
+
 ✅ Easily extendable for future cybersecurity projects
 
 
